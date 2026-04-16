@@ -1,8 +1,8 @@
-const API_URL = 'http://localhost:5000/api'; // Change to deployed backend URL in production
+const API_URL = 'https://quiz-f2u1.onrender.com'; // Change to deployed backend URL in production
 
 const request = async (endpoint, options = {}) => {
   const token = localStorage.getItem('token');
-  
+
   const headers = {
     'Content-Type': 'application/json',
     ...options.headers,

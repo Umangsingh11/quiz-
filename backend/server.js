@@ -93,7 +93,7 @@ io.on('connection', (socket) => {
   socket.on('admin_resume_quiz', () => {
     if (quizState.isActive && quizState.isPaused) {
       quizState.isPaused = false;
-      io.emit('quiz_resumed'); 
+      io.emit('quiz_resumed');
       quizState.intervalId = setInterval(() => {
         quizState.timer--;
         io.emit('timer_update', quizState.timer);
@@ -124,19 +124,19 @@ io.on('connection', (socket) => {
     if (!currentQ || currentQ._id.toString() !== questionId) return;
 
     if (!quizState.userResults[userId]) {
-        quizState.userResults[userId] = { totalScore: 0, details: [] };
+      quizState.userResults[userId] = { totalScore: 0, details: [] };
     }
 
     const timeTaken = quizState.maxTimer - quizState.timer;
     const isCorrect = currentQ.correctAnswer === selectedOption;
 
     quizState.userResults[userId].details.push({
-        questionId: currentQ._id,
-        questionText: currentQ.question,
-        selectedOption,
-        correctAnswer: currentQ.correctAnswer,
-        isCorrect,
-        timeTaken
+      questionId: currentQ._id,
+      questionText: currentQ.question,
+      selectedOption,
+      correctAnswer: currentQ.correctAnswer,
+      isCorrect,
+      timeTaken
     });
 
     if (isCorrect) {
@@ -151,9 +151,9 @@ io.on('connection', (socket) => {
   });
 
   socket.on('cheat_detected', async (data) => {
-    const { userId, event, name } = data; 
+    const { userId, event, name } = data;
     await Log.create({ userId, event });
-    
+
     if (!cheatCounts[userId]) cheatCounts[userId] = 0;
     cheatCounts[userId]++;
 
@@ -223,16 +223,15 @@ async function endQuiz() {
   quizState.isPaused = false;
   clearInterval(quizState.intervalId);
   io.emit('quiz_ended');
-  
-  // Save results globally
+
   for (const userId of Object.keys(quizState.userResults)) {
-      try {
-          await QuizResult.create({
-              userId,
-              totalScore: quizState.userResults[userId].totalScore,
-              details: quizState.userResults[userId].details
-          });
-      } catch (err) { console.error('Error saving result', err); }
+    try {
+      await QuizResult.create({
+        userId,
+        totalScore: quizState.userResults[userId].totalScore,
+        details: quizState.userResults[userId].details
+      });
+    } catch (err) { console.error('Error saving result', err); }
   }
 
   updateGlobalLeaderboard();
@@ -251,7 +250,11 @@ async function updateGlobalLeaderboard() {
 
 app.use(express.static(path.join(__dirname, "../frontend")));
 
+// 🔥 FINAL FIX
 app.get("*", (req, res) => {
+  if (req.originalUrl.startsWith('/api')) {
+    return res.status(404).json({ message: "API route not found" });
+  }
   res.sendFile(path.join(__dirname, "../frontend/index.html"));
 });
 
