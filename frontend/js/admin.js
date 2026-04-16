@@ -28,7 +28,7 @@ startBtn.addEventListener('click', () => {
     socket.emit('admin_start_quiz');
     startBtn.style.display = 'none';
     pauseBtn.style.display = 'inline-block';
-    nextBtn.disabled = true; 
+    nextBtn.disabled = true;
     endBtn.disabled = false;
   }
 });
@@ -84,7 +84,7 @@ socket.on('admin_cheat_alert', (data) => {
   div.style.color = data.count >= 2 ? 'var(--error)' : 'var(--warning)';
   const time = new Date(data.time).toLocaleTimeString();
   div.innerHTML = `[${time}] <b>${data.name || data.userId}</b>: ${data.event} (Offense: ${data.count})`;
-  
+
   if (logsContainer.innerHTML.includes('No logs yet')) logsContainer.innerHTML = '';
   logsContainer.prepend(div);
 });
@@ -139,28 +139,28 @@ const loadQuestions = async () => {
 };
 
 window.deleteQuestion = async (id) => {
-  if(confirm('Delete this question?')) {
+  if (confirm('Delete this question?')) {
     try {
       await request(`/admin/questions/${id}`, { method: 'DELETE' });
       loadQuestions();
-    } catch(err) {
+    } catch (err) {
       alert(err.message);
     }
   }
 }
 
 window.editQuestion = (id, qObjStr) => {
-   const q = JSON.parse(decodeURIComponent(qObjStr));
-   document.getElementById('q-text').value = q.question;
-   document.getElementById('q-opt1').value = q.options[0] || '';
-   document.getElementById('q-opt2').value = q.options[1] || '';
-   document.getElementById('q-opt3').value = q.options[2] || '';
-   document.getElementById('q-opt4').value = q.options[3] || '';
-   document.getElementById('q-correct').value = q.correctAnswer;
-   document.getElementById('q-timer').value = q.timer || 10;
-   
-   addForm.dataset.editingId = id;
-   addForm.querySelector('button[type="submit"]').innerText = 'Update Question';
+  const q = JSON.parse(decodeURIComponent(qObjStr));
+  document.getElementById('q-text').value = q.question;
+  document.getElementById('q-opt1').value = q.options[0] || '';
+  document.getElementById('q-opt2').value = q.options[1] || '';
+  document.getElementById('q-opt3').value = q.options[2] || '';
+  document.getElementById('q-opt4').value = q.options[3] || '';
+  document.getElementById('q-correct').value = q.correctAnswer;
+  document.getElementById('q-timer').value = q.timer || 10;
+
+  addForm.dataset.editingId = id;
+  addForm.querySelector('button[type="submit"]').innerText = 'Update Question';
 };
 
 addForm.addEventListener('submit', async (e) => {
@@ -202,7 +202,7 @@ addForm.addEventListener('submit', async (e) => {
     addForm.reset();
     document.getElementById('q-timer').value = 10; // reset default
     loadQuestions();
-  } catch(err) {
+  } catch (err) {
     alert(err.message);
   } finally {
     const submitBtn = addForm.querySelector('button');
@@ -215,7 +215,7 @@ const loadLogs = async () => {
   try {
     const logs = await request('/admin/logs', { method: 'GET' });
     logsContainer.innerHTML = '';
-    if(logs.length === 0) {
+    if (logs.length === 0) {
       logsContainer.innerHTML = '<p style="color: var(--text-secondary);">No logs yet...</p>'; return;
     }
     logs.reverse().forEach(log => {
@@ -247,9 +247,9 @@ const fetchUsers = async () => {
     const response = await request('/admin/users', { method: 'GET' });
     console.log('Fetched users response:', response);
     const users = response;
-    
+
     usersContainer.innerHTML = '';
-    if(users.length === 0) {
+    if (users.length === 0) {
       usersContainer.innerHTML = '<p style="color: var(--text-secondary);">No users registered...</p>'; return;
     }
     users.forEach(u => {
@@ -257,10 +257,10 @@ const fetchUsers = async () => {
       div.style.marginBottom = '0.5rem';
       div.style.borderBottom = '1px solid #334155';
       div.style.paddingBottom = '0.5rem';
-      
+
       const statusColor = u.approved ? 'var(--success)' : 'var(--warning)';
       const statusText = u.approved ? 'Approved' : 'Waiting';
-      
+
       div.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <div>
@@ -285,7 +285,7 @@ window.approveUser = async (id) => {
   try {
     await request(`/admin/users/${id}/approve`, { method: 'PUT' });
     fetchUsers();
-  } catch(err) {
+  } catch (err) {
     alert(err.message);
   }
 };
@@ -295,7 +295,7 @@ window.rejectUser = async (id) => {
     try {
       await request(`/admin/users/${id}/reject`, { method: 'PUT' });
       fetchUsers();
-    } catch(err) {
+    } catch (err) {
       alert(err.message);
     }
   }
