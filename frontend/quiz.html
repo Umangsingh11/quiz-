@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Live Quiz</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav>
+    <h2>⚡ QuickQuiz <span style="font-size: 1rem; color: var(--warning); margin-left:1rem;">(Live)</span></h2>
+    <div class="nav-links">
+      <span id="user-score">Score: 0</span>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div id="quiz-container" class="auth-container" style="max-width: 800px; margin-top: 2rem; display: none;">
+      <div class="timer" id="timer-display">10</div>
+      
+      <div id="question-box" style="text-align: left; margin-bottom: 2rem;">
+        <h2 id="question-text">Loading question...</h2>
+      </div>
+
+      <div id="options-container" class="grid grid-cols-2">
+        <!-- Options injected here -->
+      </div>
+      
+      <p id="feedback-msg" style="margin-top: 1rem; font-weight: bold;"></p>
+    </div>
+
+    <div id="wait-msg" class="auth-container" style="max-width: 600px; margin-top: 2rem;">
+      <h2>Waiting for next question...</h2>
+    </div>
+  </div>
+
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="js/socket-client.js"></script>
+  <script src="js/anticheat.js"></script>
+  <script src="js/quiz.js"></script>
+</body>
+</html>

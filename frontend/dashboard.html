@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz Dashboard - Waiting Room</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav>
+    <h2>⚡ QuickQuiz</h2>
+    <div class="nav-links">
+      <span id="user-name"></span>
+      <button id="logout-btn" style="background-color: var(--error);">Logout</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="auth-container" style="max-width: 600px; margin-top: 2rem;">
+      <h1>Welcome to the Live Quiz</h1>
+      <p id="wait-msg-text" style="margin-bottom: 2rem; color: var(--text-secondary);">
+        Please wait for the administrator to start the quiz.
+      </p>
+
+      <div style="background-color: var(--bg-color); padding: 1rem; border-radius: 8px; text-align: left; margin-bottom: 2rem;">
+        <h3>📜 Rules & Anti-Cheat:</h3>
+        <ul style="margin-left: 1.5rem; color: var(--text-secondary); line-height: 1.6;">
+          <li>Do not switch tabs or minimize the browser.</li>
+          <li>The quiz requires Fullscreen mode.</li>
+          <li>Copy-pasting and right-clicking are disabled.</li>
+          <li><b>Two violations</b> will auto-submit your quiz!</li>
+        </ul>
+      </div>
+
+      <button id="ready-btn" style="display: none;">Enter Quiz</button>
+      <div id="unapproved-msg" style="color: var(--warning); font-weight: bold; padding: 1rem; background: var(--bg-color); border-radius: 8px; margin-top: 1rem;">
+        Quiz is ongoing or will start soon. Waiting for admin approval...
+      </div>
+    </div>
+  </div>
+
+  <!-- Socket.io from CDN -->
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="js/socket-client.js"></script>
+  <script>
+    document.getElementById('user-name').innerText = user.name;
+
+    const readyBtn = document.getElementById('ready-btn');
+    const unapprovedMsg = document.getElementById('unapproved-msg');
+
+    window.updateDashboardUIState = () => {
+      if (user.approved) {
+        readyBtn.style.display = 'block';
+        unapprovedMsg.style.display = 'none';
+      } else {
+        readyBtn.style.display = 'none';
+        unapprovedMsg.style.display = 'block';
+      }
+    };
+    window.updateDashboardUIState();
+
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      localStorage.clear();
+      window.location.href = 'index.html';
+    });
+
+    readyBtn.addEventListener('click', () => {
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+      }
+      readyBtn.innerText = "Waiting for Quiz Start...";
+      readyBtn.disabled = true;
+    });
+  </script>
+</body>
+</html>

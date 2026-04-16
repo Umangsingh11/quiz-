@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Global Leaderboard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav>
+    <h2>⚡ QuickQuiz</h2>
+    <div class="nav-links">
+      <button onclick="window.location.href='dashboard.html'">Back to Home</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="auth-container" style="max-width: 600px; margin-top: 2rem;">
+      <h1>🏆 Final Leaderboard</h1>
+      <p style="margin-bottom: 2rem; color: var(--text-secondary);">Top 10 Performers</p>
+      
+      <ul id="leaderboard-list" class="leaderboard-list" style="text-align: left;">
+        <li style="text-align: center; color: var(--text-secondary);">Loading...</li>
+      </ul>
+    </div>
+  </div>
+
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script>
+    const socket = io('http://localhost:5000');
+    const list = document.getElementById('leaderboard-list');
+
+    socket.on('connect', () => {
+      socket.emit('get_leaderboard');
+    });
+
+    socket.on('leaderboard_update', (users) => {
+      list.innerHTML = '';
+      if(users.length === 0) {
+        list.innerHTML = '<li style="text-align: center; color: var(--text-secondary);">No scores yet.</li>';
+        return;
+      }
+
+      users.forEach((u, index) => {
+        let medal = '';
+        if(index === 0) medal = '🥇';
+        else if(index === 1) medal = '🥈';
+        else if(index === 2) medal = '🥉';
+        else medal = `${index+1}.`;
+
+        const li = document.createElement('li');
+        li.className = 'leaderboard-item';
+        li.innerHTML = `<span><span style="display:inline-block; width: 30px;">${medal}</span> ${u.name}</span> <b>${u.score || 0} pts</b>`;
+        list.appendChild(li);
+      });
+    });
+  </script>
+</body>
+</html>

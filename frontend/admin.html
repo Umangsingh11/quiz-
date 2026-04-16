@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav>
+    <h2>⚡ QuickQuiz <span style="font-size: 1rem; color: var(--error);">Admin</span></h2>
+    <div class="nav-links">
+      <button id="logout-btn" style="background-color: transparent; border: 1px solid var(--text-primary);">Logout</button>
+    </div>
+  </nav>
+
+  <div class="container" style="max-width: 1400px;">
+    <div class="admin-grid">
+      <!-- Left Column: Controls -->
+      <div class="card">
+        <h3>Live Controls</h3>
+        <div class="grid" style="gap: 1rem; margin-top: 1rem;">
+          <button id="start-btn" style="background-color: var(--success);">Start Quiz</button>
+          <button id="pause-btn" style="background-color: var(--warning); display: none;">Pause Quiz</button>
+          <button id="next-btn" style="background-color: var(--primary-color);" disabled>Next Question</button>
+          <button id="end-btn" style="background-color: var(--error);" disabled>Force End Quiz</button>
+        </div>
+
+        <h3 style="margin-top: 3rem;">Live Timer</h3>
+        <div class="timer" id="admin-timer">10</div>
+        
+        <h3 style="margin-top: 2rem;">Anti-Cheat Logs</h3>
+        <button id="refresh-logs-btn" style="font-size: 0.8rem; padding: 0.5rem; margin-bottom: 0.5rem; background-color: var(--surface-color); border: 1px solid #334155;">Refresh Logs</button>
+        <div id="logs-container" style="max-height: 200px; overflow-y: auto; background: var(--bg-color); padding: 0.5rem; border-radius: 4px; font-size: 0.85rem; color: var(--warning);">
+          <p style="color: var(--text-secondary);">No logs yet...</p>
+        </div>
+
+        <h3 style="margin-top: 2rem;">User Approvals</h3>
+        <button id="refresh-users-btn" style="font-size: 0.8rem; padding: 0.5rem; margin-bottom: 0.5rem; background-color: var(--primary-color);">Refresh Users</button>
+        <div id="users-container" style="max-height: 300px; overflow-y: auto; background: var(--bg-color); padding: 0.5rem; border-radius: 4px;">
+          <p style="color: var(--text-secondary);">No users registered...</p>
+        </div>
+
+        <h3 style="margin-top: 2rem;">Live Player Status</h3>
+        <div id="live-players-container" style="max-height: 200px; overflow-y: auto; background: var(--bg-color); padding: 0.5rem; border-radius: 4px; font-size: 0.85rem;">
+          <p style="color: var(--text-secondary);">Waiting for connections...</p>
+        </div>
+      </div>
+
+      <!-- Right Column: Question Management -->
+      <div class="card">
+        <h3>Question Management</h3>
+        <form id="add-q-form" style="margin-top: 1rem; display: grid; gap: 0.5rem;">
+          <input type="text" id="q-text" placeholder="Question Text" required>
+          <div class="grid grid-cols-2">
+            <input type="text" id="q-opt1" placeholder="Option 1" required>
+            <input type="text" id="q-opt2" placeholder="Option 2" required>
+            <input type="text" id="q-opt3" placeholder="Option 3" required>
+            <input type="text" id="q-opt4" placeholder="Option 4" required>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <input type="text" id="q-correct" placeholder="Correct Answer (Must match exactly)" style="flex: 1;" required>
+            <input type="number" id="q-timer" placeholder="Timer (s)" value="10" style="width: 100px;" required>
+          </div>
+          <button type="submit">Add Question</button>
+        </form>
+
+        <h4 style="margin-top: 2rem; margin-bottom: 1rem;">Existing Questions</h4>
+        <div id="q-list" style="display: grid; gap: 1rem; max-height: 400px; overflow-y: auto;">
+          <!-- Questions populated here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
