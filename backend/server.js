@@ -18,10 +18,14 @@ connectDB();
 
 const app = express();
 
-app.use(cors());
+// ✅ CORS FIX
+app.use(cors({
+  origin: '*',
+}));
+
 app.use(express.json());
 
-// API routes
+// ✅ API routes (IMPORTANT ORDER)
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 
@@ -189,6 +193,7 @@ io.on('connection', (socket) => {
 });
 
 // ================= FUNCTIONS =================
+
 function sendCurrentQuestion() {
   clearInterval(quizState.intervalId);
   if (!quizState.isActive) return;
@@ -231,7 +236,9 @@ async function endQuiz() {
         totalScore: quizState.userResults[userId].totalScore,
         details: quizState.userResults[userId].details
       });
-    } catch (err) { console.error('Error saving result', err); }
+    } catch (err) {
+      console.error('Error saving result', err);
+    }
   }
 
   updateGlobalLeaderboard();
@@ -250,7 +257,7 @@ async function updateGlobalLeaderboard() {
 
 app.use(express.static(path.join(__dirname, "../frontend")));
 
-// 🔥 FINAL FIX
+// 🔥 FINAL FIX (THIS SOLVES YOUR ERROR)
 app.get("*", (req, res) => {
   if (req.originalUrl.startsWith('/api')) {
     return res.status(404).json({ message: "API route not found" });
@@ -259,7 +266,8 @@ app.get("*", (req, res) => {
 });
 
 // ================= SERVER =================
-const PORT = process.env.PORT || 5000;
+
+const PORT = process.env.PORT || 10000;
 
 server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
