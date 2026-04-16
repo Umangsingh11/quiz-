@@ -49,7 +49,7 @@ authForm.addEventListener('submit', async (e) => {
         body: JSON.stringify({ name, email, password }),
       });
     }
-    
+
     // Save token and user info
     localStorage.setItem('token', data.token);
     localStorage.setItem('user', JSON.stringify(data));
@@ -75,7 +75,7 @@ const checkAuth = () => {
   const userStr = localStorage.getItem('user');
   if (token && userStr) {
     const user = JSON.parse(userStr);
-    if(user.isAdmin) window.location.href = 'admin.html';
+    if (user.isAdmin) window.location.href = 'admin.html';
     else window.location.href = 'dashboard.html';
   }
 };
