@@ -47,8 +47,8 @@ let quizState = {
   isPaused: false,
   currentQuestionIndex: -1,
   questions: [],
-  timer: 10,
-  maxTimer: 10,
+  timer: 60,
+  maxTimer: 60,
   intervalId: null,
   userResults: {}
 };
@@ -75,7 +75,7 @@ io.on('connection', (socket) => {
       question: q.question,
       options: q.options,
       correctAnswer: q.correctAnswer,
-      timer: q.timer || 10
+      timer: q.timer || 60
     }));
     quizState.isActive = true;
     quizState.isPaused = false;
